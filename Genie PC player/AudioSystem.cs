@@ -15,7 +15,7 @@ namespace Genie_PC_player
         public static AudioSystem Playing=new AudioSystem();
         Stream ms;
        public WaveStream wavestream;
-       public DirectSoundOut waveout;
+       public WaveOutEvent waveout;
        public VolumeWaveProvider16 volumeProvider;
         public string song_ID;
 
@@ -51,7 +51,8 @@ namespace Genie_PC_player
             //is FLAC
             //wavestream = new BlockAlignReductionStream(WaveFormatConversionStream.CreatePcmStream(new FlacReader(ms)));
 
-            waveout = new NAudio.Wave.DirectSoundOut();
+            //waveout = new NAudio.Wave.DirectSoundOut();
+            waveout = new WaveOutEvent();
             waveout.Init(wavestream);
             waveout.Play();
             /*volumeProvider = new VolumeWaveProvider16(wavestream);

@@ -289,16 +289,23 @@ namespace Genie_PC_player
         bool isAction = true;
         private async void SongLoad(Song song)
         {
+            //동일 시 리턴
             if (AudioSystem.Playing.song_ID == song.Song_ID) return;
+
+            //음악 스트리밍 정보를 불러옵니다.
             string bit = comboBox1.Text.Substring(0, 3);
             var Prepare = Task<Boolean>.Run(() => LoadInfo(song, bit));
             Boolean s = await Prepare;
             if (!s) return;
             listBox1.Enabled = false;
+
+            //AudioSystem 초기화.
             if (AudioSystem.Playing.waveout != null)
             {
                 AudioSystem.Playing.Dispose();
             }
+
+            //엘범 사진 로드
             WebClient client = new WebClient();
             string decode = HttpUtility.UrlDecode(Songinfo.image);
             string http = "http:" + decode;
@@ -306,10 +313,12 @@ namespace Genie_PC_player
             Stream stream = new MemoryStream();
             stream.Write(buffer, 0, buffer.Length);
             pictureBox1.Image = Image.FromStream(stream);
+
             //망할 실시간 가사 부분 주석 처리
             /* var Lycis = Task.Run(() => LoadLycis(song));
              await Lycis;*/
-            //이용권 체크 드러갑니다.
+
+            //이용권 체크
             int iProdType;
             string strStreamLogData;
             string strStreamLogData2;
@@ -343,13 +352,30 @@ namespace Genie_PC_player
                 iProdType = 3; //PPS
                 strStreamLogData2 = Songinfo.ITEM_PPS_CNT;
             }
+            if (Songinfo.islogin =="Y")
+            {
+                if (!isAction)
+                {
+                    if(Songinfo.NONLICENSE == "N")
+                    {
+                        if ((Songinfo.HOLD_BACK == "Y")&&(Songinfo.SID == ""))
+                        {
+                            //메세지
+                            //권리사의 요청으로 1분 미리듣기만 제공됩니다 (hold-back)
+                        }
+                        else
+                        {
+                        }
+                    }
+                }
+            }
             //오디오 제생
             AudioSystem musicSystem = new AudioSystem(song.Song_ID);
-            musicSystem.Dispose();
-            string decode3 = HttpUtility.UrlDecode(Songinfo.StreamingURL);
-            var PrepareMusic = Task.Run(() => musicSystem.init(decode3));
+            musicSystem.Dispose(); //초기화
+            var PrepareMusic = Task.Run(() => musicSystem.init(HttpUtility.UrlDecode(Songinfo.StreamingURL)));
             await PrepareMusic;
             AudioSystem.Playing = musicSystem;
+
             listBox1.Enabled = true;
         }
 

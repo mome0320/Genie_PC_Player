@@ -33,6 +33,7 @@ namespace Genie_PC_player
         public string BITRATE { get; set; }
         public string ITEM_PPS_CNT { get; set; }
         public string MEM_CHK_UNO { get; set; }
+        public string HOLD_BACK { get; set; }
         public Dictionary<string, string> liveLycis{get; set;}
         public Song Song { get; set; }
         public string DPMRSTM_YN { get; set; }
@@ -61,6 +62,7 @@ namespace Genie_PC_player
             LOG_PARAM = data["LOG_PARAM"].ToString();
             LICENSE_YN = data["LICENSE_YN"].ToString();
             LICENSE_MSG = data["LICENSE_MSG"].ToString();
+            HOLD_BACK = data["HOLD_BACK"].ToString();
             Song = s;
         }
     }
