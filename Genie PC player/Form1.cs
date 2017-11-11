@@ -206,27 +206,27 @@ namespace Genie_PC_player
             return true;
         }
         //망할 실시간 가사 부분 불러오기
-       /* private Boolean LoadLycis(Song song)
-        {
-            StringBuilder dataParams = new StringBuilder();
-            dataParams.Append("path=a");
-            dataParams.Append("&songid=" + song.Song_ID);
-            byte[] byteDataParams = Encoding.Default.GetBytes(dataParams.ToString());
-            WebRequest re = WebRequest.Create("http://dn.genie.co.kr/app/purchase/get_msl.asp?");
-            re.Method = "POST";
-            re.ContentType = "application/x-www-form-urlencoded";
-            re.ContentLength = byteDataParams.Length;
-            Stream Datastpar = re.GetRequestStream();
-            Datastpar.Write(byteDataParams, 0, byteDataParams.Length);
-            Datastpar.Close();
-            HttpWebResponse res = (HttpWebResponse)re.GetResponse();
-            Stream ReadData = res.GetResponseStream();
-            StreamReader reData = new StreamReader(ReadData, Encoding.UTF8);
-            string strResult = reData.ReadToEnd();
-            JObject obj = JObject.Parse(strResult);
-            Songinfo.liveLycis = JsonConvert.DeserializeObject<Dictionary<string, string>>(obj.ToString());
-            return true;
-        }*/
+        /* private Boolean LoadLycis(Song song)
+         {
+             StringBuilder dataParams = new StringBuilder();
+             dataParams.Append("path=a");
+             dataParams.Append("&songid=" + song.Song_ID);
+             byte[] byteDataParams = Encoding.Default.GetBytes(dataParams.ToString());
+             WebRequest re = WebRequest.Create("http://dn.genie.co.kr/app/purchase/get_msl.asp?");
+             re.Method = "POST";
+             re.ContentType = "application/x-www-form-urlencoded";
+             re.ContentLength = byteDataParams.Length;
+             Stream Datastpar = re.GetRequestStream();
+             Datastpar.Write(byteDataParams, 0, byteDataParams.Length);
+             Datastpar.Close();
+             HttpWebResponse res = (HttpWebResponse)re.GetResponse();
+             Stream ReadData = res.GetResponseStream();
+             StreamReader reData = new StreamReader(ReadData, Encoding.UTF8);
+             string strResult = reData.ReadToEnd();
+             JObject obj = JObject.Parse(strResult);
+             Songinfo.liveLycis = JsonConvert.DeserializeObject<Dictionary<string, string>>(obj.ToString());
+             return true;
+         }*/
         private Boolean LoadInfo(Song song, string bit)
         {
             StringBuilder dataParams = new StringBuilder();
@@ -254,19 +254,11 @@ namespace Genie_PC_player
             JObject obj = JObject.Parse(strResult);
             JObject DATA = JObject.Parse(obj["DATA0"].ToString());
             CurrentSongInfo info = new CurrentSongInfo();
-            info.StreamingURL = DATA["STREAMING_MP3_URL"].ToString();
-            info.image = DATA["ABM_IMG_PATH"].ToString();
-            info.isAdult = DATA["ADULT_YN"].ToString();
-            info.islogin = DATA["ISLOGIN"].ToString();
-            info.LOG_PARAM = DATA["LOG_PARAM"].ToString();
-            info.Like_total = DATA["SONG_LIKE_CNT"].ToString();
-            info.LisenceYN = DATA["STREAMING_LICENSE_YN"].ToString();
-            info.isLycis = DATA["LYRICS_YN"].ToString();
-            info.isliked = DATA["SONG_LIKE_YN"].ToString();
-            info.Song = song;
+            info.JObjectToData(DATA, song);
             Songinfo = info;
             return true;
         }
+
 
         public void Refresh_ListBox()
         {
@@ -294,6 +286,7 @@ namespace Genie_PC_player
                 SongLoad(s);
             }
         }
+        bool isAction = true;
         private async void SongLoad(Song song)
         {
             if (AudioSystem.Playing.song_ID == song.Song_ID) return;
@@ -314,8 +307,43 @@ namespace Genie_PC_player
             stream.Write(buffer, 0, buffer.Length);
             pictureBox1.Image = Image.FromStream(stream);
             //망할 실시간 가사 부분 주석 처리
-           /* var Lycis = Task.Run(() => LoadLycis(song));
-            await Lycis;*/
+            /* var Lycis = Task.Run(() => LoadLycis(song));
+             await Lycis;*/
+            //이용권 체크 드러갑니다.
+            int iProdType;
+            string strStreamLogData;
+            string strStreamLogData2;
+            if (Songinfo.STREAM_LICENSE_YN == "Y" || Songinfo.FULLSTREAMYN=="Y"||(Songinfo.MRSTM_YN == "Y" && int.Parse(Songinfo.MRSTM_NUM) > 0))
+            {
+                isAction = true;
+            }
+            else
+            {
+                isAction = false;
+            }
+            iProdType = 0;
+            strStreamLogData = Songinfo.LOG_PARAM;
+
+            if (Songinfo.STREAM_LICENSE_YN == "Y")
+            {
+                if (Songinfo.DPMRSTM_YN == "Y")
+                {
+                    iProdType = 5; //알뜰음악감상
+                }
+                else
+                {
+                    iProdType = 1; //일반
+                }
+            } else if ((Songinfo.FULLSTERAMSVCYN == "Y") && (int.Parse(Songinfo.FULLSTREAMCNT) > 0) && (Songinfo.FULLSTREAMYN == "Y"))
+            {
+                iProdType = 2; //풀트랙
+            }
+            else if((Songinfo.MRSTM_YN=="Y")&& (int.Parse(Songinfo.MRSTM_NUM) > 0))
+            {
+                iProdType = 3; //PPS
+                strStreamLogData2 = Songinfo.ITEM_PPS_CNT;
+            }
+            //오디오 제생
             AudioSystem musicSystem = new AudioSystem(song.Song_ID);
             musicSystem.Dispose();
             string decode3 = HttpUtility.UrlDecode(Songinfo.StreamingURL);

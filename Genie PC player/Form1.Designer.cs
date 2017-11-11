@@ -81,9 +81,9 @@
             this.label1.BackColor = System.Drawing.Color.Transparent;
             this.label1.Font = new System.Drawing.Font("나눔바른고딕", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label1.ForeColor = System.Drawing.Color.White;
-            this.label1.Location = new System.Drawing.Point(176, 37);
+            this.label1.Location = new System.Drawing.Point(176, 27);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(354, 27);
+            this.label1.Size = new System.Drawing.Size(370, 35);
             this.label1.TabIndex = 3;
             this.label1.Text = "곡 이름 나오는 공간입니다.";
             // 
@@ -117,7 +117,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(477, 376);
+            this.button3.Location = new System.Drawing.Point(477, 377);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(79, 23);
             this.button3.TabIndex = 8;
@@ -155,9 +155,9 @@
             // result
             // 
             this.result.BackColor = System.Drawing.Color.Transparent;
-            this.result.Location = new System.Drawing.Point(67, 185);
+            this.result.Location = new System.Drawing.Point(67, 173);
             this.result.Name = "result";
-            this.result.Size = new System.Drawing.Size(489, 21);
+            this.result.Size = new System.Drawing.Size(294, 40);
             this.result.TabIndex = 12;
             this.result.Text = "로그인 하세요.";
             this.result.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -183,7 +183,6 @@
             // timer1
             // 
             this.timer1.Enabled = true;
-            this.timer1.Interval = 1;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // label2
@@ -208,9 +207,9 @@
             this.label4.BackColor = System.Drawing.Color.Transparent;
             this.label4.Font = new System.Drawing.Font("나눔바른고딕", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
             this.label4.ForeColor = System.Drawing.Color.White;
-            this.label4.Location = new System.Drawing.Point(178, 64);
+            this.label4.Location = new System.Drawing.Point(179, 62);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(354, 41);
+            this.label4.Size = new System.Drawing.Size(367, 18);
             this.label4.TabIndex = 19;
             this.label4.Text = "곡 이름 나오는 공간입니다.";
             // 
