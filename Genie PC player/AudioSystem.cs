@@ -27,8 +27,7 @@ namespace Genie_PC_player
         {
             this.song_ID = "";
         }
-
-        public void init(String url)
+        public void init(String url,float volume,bool isflac)
         {
             ms = new MemoryStream();
 
@@ -45,18 +44,19 @@ namespace Genie_PC_player
             }
             ms.Position = 0;
             WaveStream file = null;
-            //file = new FlacReader(ms);
-            file = new Mp3FileReader(ms);
-            wavestream = new BlockAlignReductionStream(WaveFormatConversionStream.CreatePcmStream(file));
-            //is FLAC
-            //wavestream = new BlockAlignReductionStream(WaveFormatConversionStream.CreatePcmStream(new FlacReader(ms)));
+            if(isflac)
+            file = new FlacReader(ms);else
+            file = WaveFormatConversionStream.CreatePcmStream(new Mp3FileReader(ms));
+            wavestream = new BlockAlignReductionStream(file);
 
             //waveout = new NAudio.Wave.DirectSoundOut();
             waveout = new WaveOutEvent();
+            //waveout = new WasapiOut();
             waveout.Init(wavestream);
+            volumeProvider = new VolumeWaveProvider16(wavestream);
+            volumeProvider.Volume = volume;
+            waveout.Init(volumeProvider);
             waveout.Play();
-            /*volumeProvider = new VolumeWaveProvider16(wavestream);
-            waveout.Init(volumeProvider);*/
         }
 
         public void Play()

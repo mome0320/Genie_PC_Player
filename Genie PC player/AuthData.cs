@@ -9,6 +9,7 @@ namespace Genie_PC_player
 {
     class AuthData
     {
+        public static AuthData LoginInfo;
         public string Uno { get; set; }
         public string Sex { get; set; }
         public string Name{get; set; }

@@ -10,6 +10,7 @@ namespace Genie_PC_player
 {
     class CurrentSongInfo
     {
+        public static CurrentSongInfo Songinfo;
         public string StreamingURL { get; set; }
         public string STREAM_LICENSE_YN { get; set; }
         public string LICENSE_YN { get; set; }
@@ -37,6 +38,7 @@ namespace Genie_PC_player
         public Dictionary<string, string> liveLycis{get; set;}
         public Song Song { get; set; }
         public string DPMRSTM_YN { get; set; }
+        public bool isflac { get; set; }
 
         public void JObjectToData(JObject data, Song s)
         {
@@ -63,6 +65,7 @@ namespace Genie_PC_player
             LICENSE_YN = data["LICENSE_YN"].ToString();
             LICENSE_MSG = data["LICENSE_MSG"].ToString();
             HOLD_BACK = data["HOLD_BACK"].ToString();
+            isflac = data["FILE_PATHMP3"].ToString().Contains(".flac");
             Song = s;
         }
     }
