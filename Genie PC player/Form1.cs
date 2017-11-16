@@ -20,6 +20,8 @@ namespace Genie_PC_player
     public partial class Form1 : Form
     {
         private Process process;
+        private bool isplayed = false;
+        int songplayingindex;
         public Form1()
         {
             InitializeComponent();
@@ -61,11 +63,30 @@ namespace Genie_PC_player
                 {
                     if (TotalTime.TotalMilliseconds <= CurrentTime.TotalMilliseconds)
                     {
-                        trackBar1.Value = 0;
-                        AudioSystem.Playing.wavestream.CurrentTime = TimeSpan.Zero;
-                        AudioSystem.Playing.waveout.Play();
+                        AudioSystem.Playing.waveout.Stop();
+                        AudioSystem.Playing.waveout.Dispose();
+                        AudioSystem.Playing.waveout = null;
+                        songplayingindex = songplayingindex+1;
+                        Song s;
+                        if (Song.songs.Count >= songplayingindex)
+                            s = Song.songs[songplayingindex];
+                        else
+                            s = Song.songs[0];
+                            if (s.Song_ID == AudioSystem.Playing.song_ID)
+                            {
+                                trackBar1.Value = 0;
+                                AudioSystem.Playing.wavestream.CurrentTime = TimeSpan.Zero; AudioSystem.Playing.waveout.Play(); return; }
+                            if (s.Streaming == "Y")
+                            {
+                                isplayed = true;
+                                listBox1.SelectedIndex = songplayingindex;
+                                label1.Text = s.Name;
+                                label4.Text = s.Artist;
+                                SongLoad(s);
+                            }
                     }
                 }
+
 
             }
 
@@ -87,6 +108,8 @@ namespace Genie_PC_player
         }
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (isplayed) {isplayed = false; return;}
+            songplayingindex = listBox1.SelectedIndex;
             var s = Song.songs[listBox1.SelectedIndex];
             if (s.Streaming == "Y")
             {
@@ -98,6 +121,7 @@ namespace Genie_PC_player
 
         //기능
         private static CurrentSongInfo Songinfo = new CurrentSongInfo();
+
         private async void Login()
         {
             if (AuthData.LoginInfo == null)
@@ -167,6 +191,7 @@ namespace Genie_PC_player
             Stream Datastpar = re.GetRequestStream();
             Datastpar.Write(byteDataParams, 0, byteDataParams.Length);
             Datastpar.Close();
+            Datastpar.Dispose();
             HttpWebResponse res = (HttpWebResponse)re.GetResponse();
             Stream ReadData = res.GetResponseStream();
             StreamReader reData = new StreamReader(ReadData, Encoding.UTF8);
@@ -212,16 +237,15 @@ namespace Genie_PC_player
         {
             //동일 시 리턴
             if (AudioSystem.Playing.song_ID == song.Song_ID) return;
-
             //음악 스트리밍 정보를 불러옵니다.
-            string bit = comboBox1.Text.Substring(0, comboBox1.Text.Length-1);
+            string bit = comboBox1.Text.Substring(0, comboBox1.Text.Length - 1);
             var Prepare = Task<Boolean>.Run(() => LoadInfo(song, bit));
             Boolean s = await Prepare;
             if (!s) return;
             listBox1.Enabled = false;
 
             //AudioSystem 초기화.
-            if (AudioSystem.Playing.waveout != null)
+            if (AudioSystem.Playing != null)
             {
                 AudioSystem.Playing.Dispose();
             }
@@ -231,29 +255,97 @@ namespace Genie_PC_player
             string decode = HttpUtility.UrlDecode(Songinfo.image);
             string http = "http:" + decode;
             byte[] buffer = client.DownloadData(new Uri(http));
-            Stream stream = new MemoryStream();
-            stream.Write(buffer, 0, buffer.Length);
-            pictureBox1.Image = Image.FromStream(stream);
-
+            using (Stream stream = new MemoryStream())
+            {
+                stream.Write(buffer, 0, buffer.Length);
+                pictureBox1.Image = Image.FromStream(stream);
+            }
             //망할 실시간 가사 부분 주석 처리
             /* var Lycis = Task.Run(() => LoadLycis(song));
              await Lycis;*/
+            if (notifyIcon1.Visible)
+            {
+                notifyIcon1.BalloonTipIcon = ToolTipIcon.Info;
+                notifyIcon1.BalloonTipText = "현재 곡 : " + song.Name + " / " + song.Artist;
+                notifyIcon1.ShowBalloonTip(2);
 
+                if (AuthData.LoginInfo == null) { Thread.Sleep(3000); notifyIcon1.BalloonTipText = "비로그인 회원은 1분 미리 듣기만 가능합니다."; notifyIcon1.BalloonTipIcon = ToolTipIcon.Warning; notifyIcon1.ShowBalloonTip(5); }
+            }
             //오디오 재생
-            AudioSystem musicSystem = new AudioSystem(song.Song_ID);
-            musicSystem.Dispose(); //초기화
-            float volume= (float)trackBar2.Value / 100.0f;
-            var PrepareMusic = Task.Run(() => musicSystem.init(HttpUtility.UrlDecode(Songinfo.StreamingURL), volume, Songinfo.isflac));
+            AudioSystem.Playing = new AudioSystem(song.Song_ID);
+            //musicSystem.Dispose(); //초기화
+            float volume = (float)trackBar2.Value / 10.0f;
+            var PrepareMusic = Task.Run(() => AudioSystem.Playing.init(HttpUtility.UrlDecode(Songinfo.StreamingURL), volume, Songinfo.isflac));
             await PrepareMusic;
-            AudioSystem.Playing = musicSystem;
-
+            // AudioSystem.Playing = musicSystem;
             listBox1.Enabled = true;
         }
 
         private void trackBar2_Scroll(object sender, EventArgs e)
         {
-            float i = (float)trackBar2.Value / 100.0f;
+            float i = (float)trackBar2.Value / 10.0f;
             AudioSystem.Playing.volumeProvider.Volume = i;
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label8_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            notifyIcon1.Visible = true;
+            this.Hide();
+            this.ShowInTaskbar = false;
+            notifyIcon1.BalloonTipTitle = "지니 PC 플레이어";
+            notifyIcon1.BalloonTipText = "성공적으로 트레이에 이동되었습니다.";
+            notifyIcon1.ShowBalloonTip(3);
+        }
+
+        private void notifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            notifyIcon1.Visible = false;
+            this.Show();
+            this.ShowInTaskbar = true;
+        }
+
+        private void 창모드로전환ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            notifyIcon1.Visible = false;
+            this.Show();
+            this.ShowInTaskbar = true;
+        }
+
+        private void 닫기ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void Play_Click(object sender, EventArgs e)
+        {
+            if(AudioSystem.Playing != null)
+            {
+               if(AudioSystem.Playing.waveout.PlaybackState != PlaybackState.Playing)
+                {
+                    AudioSystem.Playing.Play();
+                    Play.Text = "일시정지";
+                }
+                else
+                {
+                    AudioSystem.Playing.Pause();
+                    Play.Text = "재생";
+                }
+            }
         }
     }
 }

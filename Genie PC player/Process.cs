@@ -47,10 +47,12 @@ namespace Genie_PC_player
             string imagelink = this.GetInfoString(DATA, "MemImg");
             WebClient client = new WebClient();
             byte[] buffer = client.DownloadData(new Uri(imagelink));
-            Stream stream = new MemoryStream();
-            stream.Write(buffer, 0, buffer.Length);
-            authdata.img = Image.FromStream(stream);
+            using (Stream stream = new MemoryStream())
+            {
+                stream.Write(buffer, 0, buffer.Length);
+                authdata.img = Image.FromStream(stream);
             AuthData.LoginInfo = authdata;
+            }
             return true;
         }
         public string RetCode = "";
@@ -147,70 +149,162 @@ namespace Genie_PC_player
              Songinfo.liveLycis = JsonConvert.DeserializeObject<Dictionary<string, string>>(obj.ToString());
              return true;
          }*/
-        /* public void onLogic()
+        public int getProdType()
         {
-            //이용권 체크
-            int iProdType;
-            string strStreamLogData;
-            string strStreamLogData2;
-            if (Songinfo.STREAM_LICENSE_YN == "Y" || Songinfo.FULLSTREAMYN == "Y" || (Songinfo.MRSTM_YN == "Y" && int.Parse(Songinfo.MRSTM_NUM) > 0)) isAction = true;
-            else isAction = false;
-
-            iProdType = 0;
-            strStreamLogData = Songinfo.LOG_PARAM;
-
-            if (Songinfo.STREAM_LICENSE_YN == "Y")
+            CurrentSongInfo s = CurrentSongInfo.Songinfo;
+            if (s.STREAM_LICENSE_YN == "Y")
             {
-                if (Songinfo.DPMRSTM_YN == "Y")
+                if (s.DPMRSTM_YN == "Y")
                 {
-                    iProdType = 5; //알뜰음악감상
+                    return 5;
                 }
                 else
                 {
-                    iProdType = 1; //일반
+                    return 1;
                 }
             }
-            else if ((Songinfo.FULLSTERAMSVCYN == "Y") && (int.Parse(Songinfo.FULLSTREAMCNT) > 0) && (Songinfo.FULLSTREAMYN == "Y"))
+            else if ((s.FULLSTERAMSVCYN == "Y") && (int.Parse(s.FULLSTREAMCNT) > 0) && (s.FULLSTREAMYN == "Y"))
             {
-                iProdType = 2; //풀트랙
+                return 2; //풀트랙 씨발 무료 꺼져
             }
-            else if ((Songinfo.MRSTM_YN == "Y") && (int.Parse(Songinfo.MRSTM_NUM) > 0))
+            else if ((s.MRSTM_YN == "Y") && (int.Parse(s.MRSTM_NUM) > 0))
             {
-                iProdType = 3; //PPS
+                return 3; //PPS 씨발 병신 왜 이렇게 PC만 바라냐 ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ
+                //strStreamLogData2 = Songinfo.ITEM_PPS_CNT;
+            }
+            return 0;
+        }
+        bool isDpMrLayerAgree = false;
+       /*public PlayMode getPlayMode()
+        {
+            CurrentSongInfo s = CurrentSongInfo.Songinfo;
+            bool isAction;
+            if (s.STREAM_LICENSE_YN == "Y" || s.FULLSTREAMYN == "Y" || (s.MRSTM_YN == "Y" && int.Parse(s.MRSTM_NUM) > 0)) isAction = true;
+            else isAction = false;
+            int prod = getProdType();
+            if (s.islogin == "Y")
+            {
+                if (!isAction)
+                {
+                    if (s.NONLICENSE == "N")
+                    {
+                        if ((s.HOLD_BACK == "Y") && (s.SID == ""))
+                        {
+                            return PlayMode.onemin;
+                        }
+                        else
+                        {
+                            if (s.LICENSE_YN == "N" && s.LICENSE_MSG != "")
+                            {
+                                return PlayMode.onemin;
+                            }
+                            else
+                            {
+                                return PlayMode.onemin;
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                return PlayMode.onemin;
+            }
+            if (prod == 5)
+            {
+                int iPayCnt = int.Parse(s.DPMRSTM_CNT);
+                int iPayAmount = iPayCnt * 10;
+
+                if (iPayCnt % 100 == 0 && iPayCnt >= 100)
+                {
+                    int iPopCnt = iPayCnt / 100;
+                    if (iPopCnt >= 6)
+                    {
+                        //얼마나 이런 미친짓을 했길레
+                        //사용량이 마나요?
+                    }
+                    else
+                    {
+                        //금액 알림이네? ㅋ
+                    }
+                    //iPayCnt + "회";
+                    //iPayAmount+"원";
+                }
+            }
+        }
+      /*  public PlayMode StreamingReady()
+        {
+            CurrentSongInfo Songinfo = CurrentSongInfo.Songinfo;
+            bool isAction;
+            string strStreamLogData2;
+            if (Songinfo.STREAM_LICENSE_YN == "Y" || Songinfo.FULLSTREAMYN == "Y" || (Songinfo.MRSTM_YN == "Y" && int.Parse(Songinfo.MRSTM_NUM) > 0)) isAction = true;
+            else isAction = false;
+            int prod = getProdType();
+            if (prod == 3)
+            {
                 strStreamLogData2 = Songinfo.ITEM_PPS_CNT;
+                //잔여곡: MRSTM_NUM;
+                //사용 표시 해야한다 이기야
             }
             if (Songinfo.islogin == "Y")
             {
                 if (!isAction)
                 {
-                    if (Songinfo.NONLICENSE == "N")
+                    if(Songinfo.NONLICENSE == "N")
                     {
-                        if ((Songinfo.HOLD_BACK == "Y") && (Songinfo.SID == ""))
+                        if((Songinfo.HOLD_BACK == "Y")&&(Songinfo.SID == ""))
                         {
-                            //메세지
-                            //권리사의 요청으로 1분 미리듣기만 제공됩니다 (hold-back)
+                            return PlayMode.onemin;
                         }
                         else
                         {
-                            if (Songinfo.LICENSE_YN == "N" && Songinfo.LICENSE_MSG != "")
+                            if(Songinfo.LICENSE_YN == "N"&&Songinfo.LICENSE_MSG != "")
                             {
-                                //(1분) LICENSE_MSG 출력 하고 상품 구매하기 창 나오네?
+                                return PlayMode.onemin;
                             }
                             else
                             {
-                                //상품권 구매 안내 ^^
+                                return PlayMode.onemin;
                             }
                         }
                     }
-                    else
-                    {
-                        //권리사의 요청으로 1분 미리듣기만 제공됩니다.
-                    }
                 }
             }
-            else { /*1분 미리듣기 중입니다.<br />로그인 후 음악감상 상품이 있으시면 전곡 감상이 가능합니다.}
+            else
+            {
+                return PlayMode.onemin;
+            }
+            if(prod ==5 && !isDpMrLayerAgree)
+            {
+                int iPayCnt = int.Parse(Songinfo.DPMRSTM_CNT);
+                int iPayAmount = iPayCnt * 10;
 
+                if(iPayCnt % 100 == 0 &&iPayCnt >= 100)
+                {
+                    int iPopCnt = iPayCnt / 100;
+                    if(iPopCnt >= 6)
+                    {
+                        //얼마나 이런 미친짓을 했길레
+                        //사용량이 마나요?
+                    }
+                    else
+                    {
+                        //금액 알림이네? ㅋ
+                    }
+                   //iPayCnt + "회";
+                   //iPayAmount+"원";
+                }
+            }
         }*/
+        public enum PlayMode
+        {
+
+            Normal = 0,
+
+            onemin = 1,
+
+            NONE = 2
+        }
     }
 
 }

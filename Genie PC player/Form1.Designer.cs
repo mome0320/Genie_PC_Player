@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -52,12 +53,23 @@
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
-            this.button2 = new System.Windows.Forms.Button();
             this.trackBar2 = new System.Windows.Forms.TrackBar();
+            this.button5 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.button6 = new System.Windows.Forms.Button();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.닫기ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.지니플레이어Beta01ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.창모드로전환ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.madeByMoartMedia = new System.Windows.Forms.ToolStripMenuItem();
+            this.업데이트확인ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.Play = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.Profile)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).BeginInit();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // listBox1
@@ -66,7 +78,7 @@
             this.listBox1.ItemHeight = 12;
             this.listBox1.Location = new System.Drawing.Point(12, 219);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(544, 148);
+            this.listBox1.Size = new System.Drawing.Size(534, 172);
             this.listBox1.TabIndex = 1;
             this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             // 
@@ -88,11 +100,11 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(370, 35);
             this.label1.TabIndex = 3;
-            this.label1.Text = "곡 이름 나오는 공간입니다.";
+            this.label1.Text = "재생 할 노래가 없습니다.";
             // 
             // LoginButton
             // 
-            this.LoginButton.Location = new System.Drawing.Point(287, 382);
+            this.LoginButton.Location = new System.Drawing.Point(287, 408);
             this.LoginButton.Name = "LoginButton";
             this.LoginButton.Size = new System.Drawing.Size(65, 21);
             this.LoginButton.TabIndex = 5;
@@ -102,9 +114,10 @@
             // 
             // trackBar1
             // 
+            this.trackBar1.AutoSize = false;
             this.trackBar1.Location = new System.Drawing.Point(176, 108);
             this.trackBar1.Name = "trackBar1";
-            this.trackBar1.Size = new System.Drawing.Size(376, 45);
+            this.trackBar1.Size = new System.Drawing.Size(376, 34);
             this.trackBar1.TabIndex = 6;
             this.trackBar1.Scroll += new System.EventHandler(this.trackBar1_Scroll);
             // 
@@ -120,7 +133,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(477, 377);
+            this.button3.Location = new System.Drawing.Point(477, 403);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(79, 23);
             this.button3.TabIndex = 8;
@@ -140,14 +153,14 @@
             // 
             // ID
             // 
-            this.ID.Location = new System.Drawing.Point(73, 382);
+            this.ID.Location = new System.Drawing.Point(73, 408);
             this.ID.Name = "ID";
             this.ID.Size = new System.Drawing.Size(100, 21);
             this.ID.TabIndex = 10;
             // 
             // PW
             // 
-            this.PW.Location = new System.Drawing.Point(182, 382);
+            this.PW.Location = new System.Drawing.Point(182, 408);
             this.PW.Name = "PW";
             this.PW.PasswordChar = '*';
             this.PW.Size = new System.Drawing.Size(100, 21);
@@ -175,7 +188,7 @@
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(382, 378);
+            this.textBox1.Location = new System.Drawing.Point(382, 404);
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(96, 21);
             this.textBox1.TabIndex = 15;
@@ -196,9 +209,9 @@
             // label3
             // 
             this.label3.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.label3.Location = new System.Drawing.Point(504, 130);
+            this.label3.Location = new System.Drawing.Point(508, 130);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(42, 12);
+            this.label3.Size = new System.Drawing.Size(35, 12);
             this.label3.TabIndex = 18;
             this.label3.Text = "00:00";
             // 
@@ -211,12 +224,12 @@
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(367, 18);
             this.label4.TabIndex = 19;
-            this.label4.Text = "곡 이름 나오는 공간입니다.";
+            this.label4.Text = "재생할 노래를 선택하세요!";
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(71, 370);
+            this.label5.Location = new System.Drawing.Point(71, 396);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(20, 12);
             this.label5.TabIndex = 20;
@@ -225,7 +238,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(182, 370);
+            this.label6.Location = new System.Drawing.Point(182, 396);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(27, 12);
             this.label6.TabIndex = 21;
@@ -258,38 +271,125 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(10, 370);
+            this.label8.Location = new System.Drawing.Point(10, 396);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(39, 12);
             this.label8.TabIndex = 24;
             this.label8.Text = "총 0곡";
+            this.label8.Click += new System.EventHandler(this.label8_Click);
+            // 
+            // trackBar2
+            // 
+            this.trackBar2.AutoSize = false;
+            this.trackBar2.Location = new System.Drawing.Point(518, 16);
+            this.trackBar2.Name = "trackBar2";
+            this.trackBar2.Orientation = System.Windows.Forms.Orientation.Vertical;
+            this.trackBar2.Size = new System.Drawing.Size(28, 64);
+            this.trackBar2.TabIndex = 26;
+            this.trackBar2.Value = 5;
+            this.trackBar2.Scroll += new System.EventHandler(this.trackBar2_Scroll);
+            // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(385, 188);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(161, 28);
+            this.button5.TabIndex = 27;
+            this.button5.Text = "동기화 재생목록 불러오기";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(471, 193);
+            this.button2.Location = new System.Drawing.Point(550, 429);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.Size = new System.Drawing.Size(16, 10);
             this.button2.TabIndex = 25;
             this.button2.Text = "중복 제거";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
-            // trackBar2
+            // notifyIcon1
             // 
-            this.trackBar2.Location = new System.Drawing.Point(442, 57);
-            this.trackBar2.Maximum = 100;
-            this.trackBar2.Name = "trackBar2";
-            this.trackBar2.Size = new System.Drawing.Size(104, 45);
-            this.trackBar2.TabIndex = 26;
-            this.trackBar2.Value = 50;
-            this.trackBar2.Scroll += new System.EventHandler(this.trackBar2_Scroll);
+            this.notifyIcon1.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Warning;
+            this.notifyIcon1.BalloonTipText = "지니 PC 플레이어";
+            this.notifyIcon1.BalloonTipTitle = "지니 PC 플레이어";
+            this.notifyIcon1.ContextMenuStrip = this.contextMenuStrip1;
+            this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
+            this.notifyIcon1.Text = "지니 PC 플레이어";
+            this.notifyIcon1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseDoubleClick);
+            // 
+            // button6
+            // 
+            this.button6.Location = new System.Drawing.Point(484, 432);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(75, 23);
+            this.button6.TabIndex = 28;
+            this.button6.Text = "트레이로";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.지니플레이어Beta01ToolStripMenuItem,
+            this.Play,
+            this.창모드로전환ToolStripMenuItem,
+            this.닫기ToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(199, 114);
+            // 
+            // 닫기ToolStripMenuItem
+            // 
+            this.닫기ToolStripMenuItem.Name = "닫기ToolStripMenuItem";
+            this.닫기ToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.닫기ToolStripMenuItem.Text = "닫기";
+            this.닫기ToolStripMenuItem.Click += new System.EventHandler(this.닫기ToolStripMenuItem_Click);
+            // 
+            // 지니플레이어Beta01ToolStripMenuItem
+            // 
+            this.지니플레이어Beta01ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.madeByMoartMedia,
+            this.업데이트확인ToolStripMenuItem});
+            this.지니플레이어Beta01ToolStripMenuItem.Name = "지니플레이어Beta01ToolStripMenuItem";
+            this.지니플레이어Beta01ToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.지니플레이어Beta01ToolStripMenuItem.Text = "지니 플레이어 Beta 0.1";
+            // 
+            // 창모드로전환ToolStripMenuItem
+            // 
+            this.창모드로전환ToolStripMenuItem.Name = "창모드로전환ToolStripMenuItem";
+            this.창모드로전환ToolStripMenuItem.Size = new System.Drawing.Size(198, 22);
+            this.창모드로전환ToolStripMenuItem.Text = "창모드로 전환";
+            this.창모드로전환ToolStripMenuItem.Click += new System.EventHandler(this.창모드로전환ToolStripMenuItem_Click);
+            // 
+            // madeByMoartMedia
+            // 
+            this.madeByMoartMedia.Enabled = false;
+            this.madeByMoartMedia.Name = "madeByMoartMedia";
+            this.madeByMoartMedia.Size = new System.Drawing.Size(190, 22);
+            this.madeByMoartMedia.Text = "Made By MoartMedia";
+            // 
+            // 업데이트확인ToolStripMenuItem
+            // 
+            this.업데이트확인ToolStripMenuItem.Name = "업데이트확인ToolStripMenuItem";
+            this.업데이트확인ToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.업데이트확인ToolStripMenuItem.Text = "업데이트 확인";
+            // 
+            // Play
+            // 
+            this.Play.Name = "Play";
+            this.Play.Size = new System.Drawing.Size(198, 22);
+            this.Play.Text = "재생/일시정지";
+            this.Play.Click += new System.EventHandler(this.Play_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Silver;
-            this.ClientSize = new System.Drawing.Size(564, 403);
+            this.ClientSize = new System.Drawing.Size(558, 452);
+            this.Controls.Add(this.button6);
+            this.Controls.Add(this.button5);
             this.Controls.Add(this.trackBar2);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.label8);
@@ -314,14 +414,15 @@
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.listBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.Name = "Form1";
-            this.ShowIcon = false;
             this.Text = "지니 PC 플레이어 Beta 0.1";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.Profile)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).EndInit();
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -352,8 +453,18 @@
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.Button button2;
         private System.Windows.Forms.TrackBar trackBar2;
+        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.NotifyIcon notifyIcon1;
+        private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem 지니플레이어Beta01ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem madeByMoartMedia;
+        private System.Windows.Forms.ToolStripMenuItem 업데이트확인ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 창모드로전환ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 닫기ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem Play;
     }
 }
 

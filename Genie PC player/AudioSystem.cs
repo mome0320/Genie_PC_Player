@@ -17,11 +17,14 @@ namespace Genie_PC_player
        public WaveStream wavestream;
        public WaveOutEvent waveout;
        public VolumeWaveProvider16 volumeProvider;
+        public string url;
+       private WaveStream file;
         public string song_ID;
 
         public AudioSystem(string song_ID)
         {
             this.song_ID = song_ID;
+            Playing = null;
         }
         public AudioSystem()
         {
@@ -30,20 +33,25 @@ namespace Genie_PC_player
         public void init(String url,float volume,bool isflac)
         {
             ms = new MemoryStream();
-
             using (Stream stream = WebRequest.Create(url).GetResponse().GetResponseStream())
             {
                 byte[] buffer = new byte[32768];
                 int read;
                 while ((read = stream.Read(buffer, 0, buffer.Length)) > 0)
                 {
-                    ms.Write(buffer, 0, read);
+                    if (ms != null)
+                    {
+                        ms.Write(buffer, 0, read);
+                    }
+                    else
+                    {
+                        ms = new MemoryStream();
+                    }
                 }
                 stream.Dispose();
                 stream.Close();
             }
             ms.Position = 0;
-            WaveStream file = null;
             if(isflac)
             file = new FlacReader(ms);else
             file = WaveFormatConversionStream.CreatePcmStream(new Mp3FileReader(ms));
@@ -55,6 +63,7 @@ namespace Genie_PC_player
             waveout.Init(wavestream);
             volumeProvider = new VolumeWaveProvider16(wavestream);
             volumeProvider.Volume = volume;
+            waveout.DeviceNumber = -1;
             waveout.Init(volumeProvider);
             waveout.Play();
         }
@@ -77,13 +86,20 @@ namespace Genie_PC_player
             {
                 if (waveout != null) waveout.Dispose();
                 waveout = null;
-                if (ms != null) { ms.Dispose(); ms.Close(); }
+                if (ms != null) { ms.Close(); ms.Dispose();}
                 ms = null;
                 if (wavestream != null)
                 {
-                    wavestream.Dispose(); wavestream.Close();
-                    wavestream = null;
+                    wavestream.Close(); wavestream.Dispose();
                 }
+                wavestream = null;
+                if (file != null)
+                {
+                    file.Close(); file.Dispose();
+                }
+                file = null;
+                volumeProvider = null;
+                Playing = null;
             }
             catch (Exception e) { }
         }
