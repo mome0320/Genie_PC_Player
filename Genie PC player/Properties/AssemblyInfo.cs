@@ -1,17 +1,18 @@
-﻿using System.Reflection;
+﻿using System.Resources;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // 어셈블리에 대한 일반 정보는 다음 특성 집합을 통해 
 // 제어됩니다. 어셈블리와 관련된 정보를 수정하려면
 // 이러한 특성 값을 변경하세요.
-[assembly: AssemblyTitle("Genie PC player")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("지니 뮤직 플레이어")]
+[assembly: AssemblyDescription("지니 비공식 플레이어 입니다.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("MoartMedia(Personal)")]
 [assembly: AssemblyProduct("Genie PC player")]
-[assembly: AssemblyCopyright("Copyright ©  2017")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCopyright("(Api,image) CopyRight GenieMusic,(Program) CopyRight MoartMedia")]
+[assembly: AssemblyTrademark("MoartMedia(Personal)")]
 [assembly: AssemblyCulture("")]
 
 // ComVisible을 false로 설정하면 이 어셈블리의 형식이 COM 구성 요소에 
@@ -33,4 +34,6 @@ using System.Runtime.InteropServices;
 // 지정되도록 할 수 있습니다.
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyFileVersion("0.1.1.0")]
+[assembly: NeutralResourcesLanguage("ko")]
+

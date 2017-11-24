@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
@@ -39,7 +40,7 @@ namespace Genie_PC_player
         public Song Song { get; set; }
         public string DPMRSTM_YN { get; set; }
         public bool isflac { get; set; }
-
+        [Obfuscation(Feature = "renaming", Exclude = true)]
         public void JObjectToData(JObject data, Song s)
         {
             StreamingURL = HttpUtility.UrlDecode(data["STREAMING_MP3_URL"].ToString());

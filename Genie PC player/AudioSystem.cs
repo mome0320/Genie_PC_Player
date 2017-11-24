@@ -7,9 +7,11 @@ using System.Text;
 using System.Threading.Tasks;
 using NAudio.Wave;
 using NAudio.Flac;
+using System.Reflection;
 
 namespace Genie_PC_player
 {
+    //[Obfuscation(Feature = "renaming", Exclude = true)]
     class AudioSystem
     {
         public static AudioSystem Playing=new AudioSystem();
@@ -20,53 +22,65 @@ namespace Genie_PC_player
         public string url;
        private WaveStream file;
         public string song_ID;
+        public bool isFull;
+        public bool islogged;
+        public bool issns;
+        public bool isseek;
 
-        public AudioSystem(string song_ID)
+        public AudioSystem(string song_ID, bool isFull)
         {
             this.song_ID = song_ID;
+            this.isFull = isFull;
+            isseek = false;
+            if(Playing != null) Playing.Dispose();
             Playing = null;
         }
         public AudioSystem()
         {
             this.song_ID = "";
         }
-        public void init(String url,float volume,bool isflac)
+        public void init(String url, float volume, bool isflac)
         {
-            ms = new MemoryStream();
-            using (Stream stream = WebRequest.Create(url).GetResponse().GetResponseStream())
+            try
             {
-                byte[] buffer = new byte[32768];
-                int read;
-                while ((read = stream.Read(buffer, 0, buffer.Length)) > 0)
+                ms = new MemoryStream();
+                using (Stream stream = WebRequest.Create(url).GetResponse().GetResponseStream())
                 {
-                    if (ms != null)
+                    byte[] buffer = new byte[32768];
+                    int read;
+                    while ((read = stream.Read(buffer, 0, buffer.Length)) > 0)
                     {
-                        ms.Write(buffer, 0, read);
+                        if (ms != null)
+                        {
+                            ms.Write(buffer, 0, read);
+                        }
+                        else
+                        {
+                            ms = new MemoryStream();
+                        }
                     }
-                    else
-                    {
-                        ms = new MemoryStream();
-                    }
+                    stream.Dispose();
+                    stream.Close();
                 }
-                stream.Dispose();
-                stream.Close();
-            }
-            ms.Position = 0;
-            if(isflac)
-            file = new FlacReader(ms);else
-            file = WaveFormatConversionStream.CreatePcmStream(new Mp3FileReader(ms));
-            wavestream = new BlockAlignReductionStream(file);
+                ms.Position = 0;
+                if (isflac)
+                    file = new FlacReader(ms);
+                else
+                    file = WaveFormatConversionStream.CreatePcmStream(new Mp3FileReader(ms));
+                wavestream = new BlockAlignReductionStream(file);
 
-            //waveout = new NAudio.Wave.DirectSoundOut();
-            waveout = new WaveOutEvent();
-            //waveout = new WasapiOut();
-            waveout.Init(wavestream);
-            volumeProvider = new VolumeWaveProvider16(wavestream);
-            volumeProvider.Volume = volume;
-            waveout.DeviceNumber = -1;
-            waveout.Init(volumeProvider);
-            waveout.Play();
-        }
+                //waveout = new NAudio.Wave.DirectSoundOut();
+                waveout = new WaveOutEvent();
+                //waveout = new WasapiOut();
+                waveout.Init(wavestream);
+                volumeProvider = new VolumeWaveProvider16(wavestream);
+                volumeProvider.Volume = volume;
+                waveout.DeviceNumber = -1;
+                waveout.Init(volumeProvider);
+                waveout.Play();
+            }
+            catch (Exception e) { }
+            }
 
         public void Play()
         {
@@ -84,7 +98,7 @@ namespace Genie_PC_player
         {
             try
             {
-                if (waveout != null) waveout.Dispose();
+                if (waveout != null) waveout.Stop(); waveout.Dispose();
                 waveout = null;
                 if (ms != null) { ms.Close(); ms.Dispose();}
                 ms = null;

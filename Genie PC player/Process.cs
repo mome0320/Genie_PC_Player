@@ -6,6 +6,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,6 +14,7 @@ namespace Genie_PC_player
 {
     class Process
     {
+       // [Obfuscation(Feature = "renaming", Exclude = true)]
         public Boolean Login(string id, string pw)
         {
             StringBuilder dataParams = new StringBuilder();
@@ -55,13 +57,14 @@ namespace Genie_PC_player
             }
             return true;
         }
-        public string RetCode = "";
+public string RetCode = "";
         public string RetMsg = "";
         public string RetType = "";
         public string URL = "";
         public string Page = "";
         public string TotPage = "";
         public string TotCount = "";
+        //[Obfuscation(Feature = "renaming", Exclude = true)]
         public bool checkResult(string response)
         {
             try
@@ -99,6 +102,7 @@ namespace Genie_PC_player
                 str = WebUtility.UrlDecode(SongInfo[(object)strKey].ToString());
             return str;
         }
+       // [Obfuscation(Feature = "renaming", Exclude = true)]
         public bool LoadSong(string songid)
         {
             StringBuilder dataParams = new StringBuilder();
@@ -117,7 +121,6 @@ namespace Genie_PC_player
             string strResult = reData.ReadToEnd();
             //if (!checkResult(strResult)) return false;
             JObject obj = JObject.Parse(strResult);
-            Song authdata = new Song();
             JArray songlist = JArray.Parse(obj["DataSet"]["DATA"].ToString());
             foreach (JObject songobj in songlist)
             {
@@ -127,6 +130,139 @@ namespace Genie_PC_player
             }
             return true;
         }
+
+        public async void sendFullLog()
+        {
+            if (CurrentSongInfo.Songinfo.islogin == "N") return;
+            if (AudioSystem.Playing.isseek) return;
+            string log = CurrentSongInfo.Songinfo.Song.Song_ID;
+            string log2 = CurrentSongInfo.Songinfo.MEM_CHK_UNO;
+            await Task.Run(() =>loggedFull(log,log2));
+            System.Diagnostics.Debug.WriteLine("풀로그 전송되었습니다.");
+        }
+        private bool loggedFull(string xgnm ,string unm)
+        {
+            if(unm != ""&&xgnm != "")
+            {
+                StringBuilder dataParams = new StringBuilder();
+                dataParams.Append("xgnm=" + xgnm);
+                dataParams.Append("&unm=" + unm);
+                byte[] byteDataParams = Encoding.Default.GetBytes(dataParams.ToString());
+                WebRequest re = WebRequest.Create("http://www.genie.co.kr/player/sendStreamFullLog");
+                re.Method = "POST";
+                re.ContentType = "application/x-www-form-urlencoded";
+                re.ContentLength = byteDataParams.Length;
+                Stream Datastpar = re.GetRequestStream();
+                Datastpar.Write(byteDataParams, 0, byteDataParams.Length);
+                Datastpar.Close();
+                Datastpar.Dispose();
+                HttpWebResponse res = (HttpWebResponse)re.GetResponse();
+                Stream ReadData = res.GetResponseStream();
+                StreamReader reData = new StreamReader(ReadData, Encoding.UTF8);
+                string strResult = reData.ReadToEnd();
+                JObject obj = JObject.Parse(strResult);
+                if (obj["Result"]["RetCode"].ToString().Equals("0"))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public async void LogGenie()
+        {
+            if (AudioSystem.Playing.islogged) return;
+            AudioSystem.Playing.islogged = true;
+            string log= CurrentSongInfo.Songinfo.LOG_PARAM;
+            int f = getProdType();
+            if (f == 1)
+            {
+            
+               await Task.Run(() => LoggedGerman(log));
+            }
+            else if (f == 5)
+            {
+                await Task.Run(() => LoggedDPMR(log));
+            }
+        }
+        public async void sns()
+        {
+            if (AudioSystem.Playing.issns) return;
+            AudioSystem.Playing.issns = true;
+            string unm = AuthData.LoginInfo.Uno;
+            string songid = CurrentSongInfo.Songinfo.Song.Song_ID;
+            string albumid = CurrentSongInfo.Songinfo.Song.ALBUM_ID;
+            string artistid = CurrentSongInfo.Songinfo.Song.Artist_ID;
+            StringBuilder dataParams = new StringBuilder();
+            dataParams.Append("unm=" + unm);
+            dataParams.Append("&xgnm=" + songid);
+            dataParams.Append("&axnm=" + albumid);
+            dataParams.Append("&xxnm=" + artistid);
+            byte[] byteDataParams = Encoding.Default.GetBytes(dataParams.ToString());
+            WebRequest re = WebRequest.Create("http://www.genie.co.kr/player/jPlayerStmCntProc.json");
+            re.Method = "POST";
+            re.ContentType = "application/x-www-form-urlencoded";
+            re.ContentLength = byteDataParams.Length;
+            Stream Datastpar = re.GetRequestStream();
+            Datastpar.Write(byteDataParams, 0, byteDataParams.Length);
+            Datastpar.Close();
+            Datastpar.Dispose();
+            /*HttpWebResponse res = (HttpWebResponse)re.GetResponse();
+            Stream ReadData = res.GetResponseStream();
+            StreamReader reData = new StreamReader(ReadData, Encoding.UTF8);
+            string strResult = reData.ReadToEnd();*/
+        }
+        private bool LoggedGerman(string log)
+        {
+            if(log != "")
+            {
+                StringBuilder dataParams = new StringBuilder();
+                dataParams.Append("LOG_PARAM=" + log);
+                byte[] byteDataParams = Encoding.Default.GetBytes(dataParams.ToString());
+                WebRequest re = WebRequest.Create("http://www.genie.co.kr/player/sendPlayStreamLog");
+                re.Method = "POST";
+                re.ContentType = "application/x-www-form-urlencoded";
+                re.ContentLength = byteDataParams.Length;
+                Stream Datastpar = re.GetRequestStream();
+                Datastpar.Write(byteDataParams, 0, byteDataParams.Length);
+                Datastpar.Close();
+                Datastpar.Dispose();
+                HttpWebResponse res = (HttpWebResponse)re.GetResponse();
+                Stream ReadData = res.GetResponseStream();
+                StreamReader reData = new StreamReader(ReadData, Encoding.UTF8);
+                string strResult = reData.ReadToEnd();
+                JObject obj = JObject.Parse(strResult);
+                if(obj["Result"]["RetCode"].ToString().Equals("0"))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        private bool LoggedDPMR(string log)
+        {
+            StringBuilder dataParams = new StringBuilder();
+            dataParams.Append("xpld=" + log);
+            byte[] byteDataParams = Encoding.Default.GetBytes(dataParams.ToString());
+            WebRequest re = WebRequest.Create("/player/jPlayerDpMeterRateOffSet");
+            re.Method = "POST";
+            re.ContentType = "application/x-www-form-urlencoded";
+            re.ContentLength = byteDataParams.Length;
+            Stream Datastpar = re.GetRequestStream();
+            Datastpar.Write(byteDataParams, 0, byteDataParams.Length);
+            Datastpar.Close();
+            Datastpar.Dispose();
+            HttpWebResponse res = (HttpWebResponse)re.GetResponse();
+            Stream ReadData = res.GetResponseStream();
+            StreamReader reData = new StreamReader(ReadData, Encoding.UTF8);
+            string strResult = reData.ReadToEnd();
+            JObject obj = JObject.Parse(strResult);
+            if (obj["Result"]["RetCode"].ToString().Equals("0"))
+            {
+                return true;
+            }
+            return false;
+            }
         //망할 실시간 가사 부분 불러오기
         /* private Boolean LoadLycis(Song song)
          {

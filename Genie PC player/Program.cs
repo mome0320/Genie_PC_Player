@@ -21,7 +21,9 @@ namespace Genie_PC_player
             {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-                Application.Run(new Form1());
+                Application.Run(new Loading());
+                if(Loading.isUpdated)
+                Application.Run(new main());
                 mutex.ReleaseMutex();
             }
             else
