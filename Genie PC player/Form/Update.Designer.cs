@@ -40,7 +40,7 @@
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(310, 14);
             this.label1.TabIndex = 0;
-            this.label1.Text = "ver. Beta.20171123";
+            this.label1.Text = "ver. Beta.20171125";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // label2

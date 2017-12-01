@@ -22,7 +22,6 @@ namespace Genie_PC_player
         public string isAdult { get; set; }
         public string Duration { get; set; }
         public string Streaming { get; set; }
-        [Obfuscation(Feature = "renaming", Exclude = true)]
         public void JObjectToSong(JObject obj,Boolean islist)
         {
             //MP3 = obj["MP3_YN"].ToString();
@@ -37,7 +36,7 @@ namespace Genie_PC_player
             Streaming = obj["STM_YN"].ToString();
             if (islist) songs.Add(this);
         }
-        public void JObjectToSongSync(JObject obj, Boolean islist)
+        public void JObjectToSongSync(JObject obj, bool islist)
         {
             //MP3 = obj["MP3_YN"].ToString();
             Artist_ID = obj["ARTIST_ID"].ToString();

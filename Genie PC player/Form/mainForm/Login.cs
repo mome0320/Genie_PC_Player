@@ -40,8 +40,8 @@ namespace Genie_PC_player
             PW.Enabled = false;
             Result.Text = "로그인 중...";
             Process Login=new Process();
-            var prologin = Task<Boolean>.Run(() => Login.Login(ID.Text, PW.Text));
-            Boolean issuccess = await prologin;
+            //var prologin = Task<Boolean>.Run(() => Login.Login(ID.Text, PW.Text));
+            Boolean issuccess = await Login.LoginAsync(ID.Text, PW.Text);
             if (issuccess)
             {
                 submit.Enabled = true;
@@ -52,7 +52,12 @@ namespace Genie_PC_player
             }
             else
             {
+                if(!Login.RetMsg.Equals(""))
                 Result.Text = Login.RetMsg + "(" + Login.RetCode + ")";
+                else
+                {
+                    Result.Text = "로그인에 실패했습니다.";
+                }
                 submit.Enabled = true;
                 ID.Enabled = true;
                 PW.Enabled = true;

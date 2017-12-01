@@ -31,7 +31,7 @@ namespace Genie_PC_player
         {
             if (!System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable()){MessageBox.Show("인터넷 연결이 원활하지 않습니다." + Environment.NewLine + "네트워크 상태를 확인해주세요!"); isUpdated = false; this.Invoke(new TestDelegate2(formClose)); return; }
             System.Threading.Thread.Sleep(1500);
-                string Version = "Beta.20171123";
+                string Version = "Beta.20171125";
                 var client = new HttpClient();
                 var response = client.GetAsync("http://moartmedia.github.io/Genie/player/check.html").Result;
             if (response.StatusCode != System.Net.HttpStatusCode.OK)

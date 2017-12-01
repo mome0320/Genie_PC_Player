@@ -14,6 +14,7 @@ using System.Windows.Forms;
 using System.Timers;
 using System.Windows.Threading;
 using System.Threading;
+using Genie_PC_player.Utils;
 
 namespace Genie_PC_player
 {
@@ -24,7 +25,7 @@ namespace Genie_PC_player
         int songplayingindex;
         private Image noimage;
         private Image noAlbum;
-        public enum playmode {Normal,All, One};
+        public enum playmode { Normal, All, One };
         public playmode selectmode;
         public main()
         {
@@ -43,7 +44,7 @@ namespace Genie_PC_player
             }
             Profile.Image = noimage;
             client = new WebClient();
-            buffer = client.DownloadData(new Uri("http://image.genie.co.kr/imageg/web/common/blank_artist_200.gif"));
+            buffer = client.DownloadData(new Uri("http://image.genie.co.kr/imageg/web/common/blank_200.gif"));
             using (Stream stream = new MemoryStream())
             {
                 stream.Write(buffer, 0, buffer.Length);
@@ -104,7 +105,7 @@ namespace Genie_PC_player
         }
         private void button7_Click(object sender, EventArgs e)
         {
-            if (AudioSystem.Playing.waveout == null&& AudioSystem.Playing.wavestream == null) return;
+            if (AudioSystem.Playing.waveout == null && AudioSystem.Playing.wavestream == null) return;
             AudioSystem.Playing.Stop();
             trackBar1.Value = 0;
             AudioSystem.Playing.wavestream.CurrentTime = TimeSpan.Zero;
@@ -126,7 +127,7 @@ namespace Genie_PC_player
                 } else
                     label3.Text = TotalTime.ToString("mm\\:ss");
                 label2.Text = CurrentTime.ToString("mm\\:ss");
-                if (AudioSystem.Playing.waveout != null&&TotalTime != TimeSpan.Zero)
+                if (AudioSystem.Playing.waveout != null && TotalTime != TimeSpan.Zero)
                 {
                     if (CurrentTime.TotalMinutes >= 1)
                     {
@@ -134,16 +135,16 @@ namespace Genie_PC_player
                         {
                             nextsong();
                         }
-                        else if(!AudioSystem.Playing.islogged)
+                        else if (!AudioSystem.Playing.islogged)
                         {
                             System.Diagnostics.Debug.WriteLine("전산 처리 인식되었습니다.");
                             process.LogGenie();//전산
                         }
                     }
-                   /* else if(CurrentTime.TotalSeconds >=3&&CurrentSongInfo.Songinfo.islogin == "Y"&&!AudioSystem.Playing.issns)
-                    {
-                        process.sns();
-                    }*/
+                    /* else if(CurrentTime.TotalSeconds >=3&&CurrentSongInfo.Songinfo.islogin == "Y"&&!AudioSystem.Playing.issns)
+                     {
+                         process.sns();
+                     }*/
                     if (TotalTime.TotalMilliseconds <= CurrentTime.TotalMilliseconds)
                     {
                         if (CurrentSongInfo.Songinfo.islogin == "Y" && !AudioSystem.Playing.isseek) { System.Diagnostics.Debug.WriteLine("풀로그 전송중입니다.."); process.sendFullLog(); }
@@ -178,10 +179,10 @@ namespace Genie_PC_player
                     listBox1.SelectedIndex = 0;
                 }
             }
-            else if(selectmode.Equals(playmode.One))
+            else if (selectmode.Equals(playmode.One))
             {
                 s = CurrentSongInfo.Songinfo.Song;
-            }else if (selectmode.Equals(playmode.Normal))
+            } else if (selectmode.Equals(playmode.Normal))
             {
                 if (Song.songs.Count > songplayingindex)
                 {
@@ -227,13 +228,13 @@ namespace Genie_PC_player
         }
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (isplayed) {isplayed = false; return;}
+            if (isplayed) { isplayed = false; return; }
             songplayingindex = listBox1.SelectedIndex;
             var s = Song.songs[listBox1.SelectedIndex];
             if (s.Streaming == "Y")
             {
                 label1.Text = s.Name.Replace("&", "&&");
-                label4.Text = s.Artist.Replace("&","&&");
+                label4.Text = s.Artist.Replace("&", "&&");
                 SongLoad(s);
             }
         }
@@ -241,51 +242,37 @@ namespace Genie_PC_player
         //기능
         private async void LoadSonginfo()
         {
-            var GetSongList = Task<bool>.Run(() => process.LoadSong(textBox1.Text));
-            bool song = await GetSongList;
+            // var GetSongList = Task<bool>.Run(() => process.LoadSong(textBox1.Text));
+            bool song = await process.LoadSongAsync(textBox1.Text);
             if (!song) return;
             Song s = Song.songs.First();
             label1.Text = s.Name + " (" + s.Artist + ")";
             Refresh_ListBox();
         }
-        private Boolean LoadInfo(Song song, string bit)
+        private async Task<bool> LoadInfoAsync(Song song, string bit)
         {
-            StringBuilder dataParams = new StringBuilder();
-            dataParams.Append("xgnm=" + song.Song_ID);
-            dataParams.Append("&cdm=" + "http");
+            Uri resourceuri;
+            if (!Uri.TryCreate("http://www.genie.co.kr/player/playStmInfo.json?", UriKind.Absolute, out resourceuri)) return false;
+            HttpHelper.InitPostData();
+            HttpHelper.setPostData("xgnm", song.Song_ID);
+            HttpHelper.setPostData("cdm", "http");
             if (AuthData.LoginInfo != null)
             {
-                dataParams.Append("&uxnm=" + AuthData.LoginInfo.Uno);
-                dataParams.Append("&uxtk=" + AuthData.LoginInfo.token);
+                HttpHelper.setPostData("uxnm", AuthData.LoginInfo.Uno);
+                HttpHelper.setPostData("uxtk", AuthData.LoginInfo.token);
             }
-            dataParams.Append("&bit=" + bit);
-            byte[] byteDataParams = Encoding.Default.GetBytes(dataParams.ToString());
-            var re = (HttpWebRequest)WebRequest.Create("http://www.genie.co.kr/player/playStmInfo.json?");
-            re.Timeout = 5000;
-            re.Method = "POST";
-            re.ContentType = "application/x-www-form-urlencoded";
-            re.ProtocolVersion = System.Net.HttpVersion.Version10;
-            re.ContentLength = byteDataParams.Length;
-            using (Stream Datastpar = re.GetRequestStream())
-            {
-                Datastpar.Write(byteDataParams, 0, byteDataParams.Length);
-                Datastpar.Close();
-            }
-                using (HttpWebResponse res = (HttpWebResponse)re.GetResponse())
-                {
-                    Stream ReadData = res.GetResponseStream();
-                    StreamReader reData = new StreamReader(ReadData, Encoding.UTF8);
-                    string strResult = reData.ReadToEnd();
-                    if (!process.checkResult(strResult)) return false;
-                    JObject obj = JObject.Parse(strResult);
-                    JObject DATA = JObject.Parse(obj["DATA0"].ToString());
-                    CurrentSongInfo info = new CurrentSongInfo();
-                    info.JObjectToData(DATA, song);
-                    CurrentSongInfo.Songinfo = info;
-                    re.Abort();
-                }
+            HttpHelper.setPostData("bit", bit);
+            string Output = await HttpHelper.PostAsync(resourceuri);
+            if (string.IsNullOrEmpty(Output)) return false;
+            if (!process.checkResult(Output)) return false;
+            JObject obj = JObject.Parse(Output);
+            JObject DATA = JObject.Parse(obj["DATA0"].ToString());
+            CurrentSongInfo info = new CurrentSongInfo();
+            info.JObjectToData(DATA, song);
+            CurrentSongInfo.Songinfo = info;
             return true;
         }
+
         public void Refresh_ListBox()
         {
             List<string> temp = new List<string>();
@@ -311,27 +298,45 @@ namespace Genie_PC_player
                 temp2 = temp2 + f + ";";
             }
             Song.songs.Clear();
-            var list = Task.Run(() => process.LoadSong(temp2));
-            await list;
+            //var list = Task.Run(() => process.LoadSong(temp2));
+            await process.LoadSongAsync(temp2);
             Refresh_ListBox();
+        }
+        private void Labelbold(Label a)
+        {
+            a.Font = new System.Drawing.Font("맑은 고딕", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            a.ForeColor = System.Drawing.Color.MintCream;
+        }
+        private void Labelnormal(Label a)
+        {
+            a.Font = new System.Drawing.Font("굴림", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)));
+            a.ForeColor = System.Drawing.Color.DimGray;
         }
         private async void SongLoad(Song song)
         {
+            lyrics.Enabled = false;
+            label5.Text = ""; label6.Text = "";
+            Labelbold(label5);
+            Labelnormal(label6);
             /*//동일 시 리턴
             if (AudioSystem.Playing.song_ID == song.Song_ID) return;*/
             //음악 스트리밍 정보를 불러옵니다.
             listBox1.Enabled = false;
             string bit = "";
             if (comboBox1.Text.Equals("FLAC")) bit = "1000"; else
-            bit=comboBox1.Text.Substring(0, comboBox1.Text.Length - 1);
+                bit = comboBox1.Text.Substring(0, comboBox1.Text.Length - 1);
+            label5.Text = "음악 정보 불러오는 중..";
             System.Diagnostics.Debug.WriteLine("음악 스트리밍 정보 불러오는 중입니다..");
-            var Prepare = Task<Boolean>.Run(() => LoadInfo(song, bit));
-            Boolean s = await Prepare;
+            //var Prepare = Task<Boolean>.Run(() => LoadInfo(song, bit));
+            Boolean s = await LoadInfoAsync(song, bit);
             if (!s) { System.Diagnostics.Debug.WriteLine("음악 스트리밍: 실패"); return; }
             System.Diagnostics.Debug.WriteLine("음악 스트리밍: 성공");
             timer1.Enabled = false;
-
+            label5.Text = "가사 불러오는 중입니다..";
+            var Lyris = Task.Run(() => Lm.GetLyricsAsync(song.Song_ID));
+            await Lyris;
             System.Diagnostics.Debug.WriteLine("AudioSystem 초기화중입니다...");
+            label5.Text = "오디오 초기화 중..";
             //AudioSystem 초기화.
             if (AudioSystem.Playing != null)
             {
@@ -340,6 +345,7 @@ namespace Genie_PC_player
             System.Diagnostics.Debug.WriteLine("AudioSystem 초기화 완료.");
 
             //엘범 사진 로드
+            label5.Text = "엘범 사진 준비중..";
             System.Diagnostics.Debug.WriteLine("엘범 사진 로드중입니다..");
             WebClient client = new WebClient();
             string decode = HttpUtility.UrlDecode(CurrentSongInfo.Songinfo.image);
@@ -354,29 +360,33 @@ namespace Genie_PC_player
             //망할 실시간 가사 부분 주석 처리
             /* var Lycis = Task.Run(() => LoadLycis(song));
              await Lycis;*/
-           if (notifyIcon1.Visible)
+            if (notifyIcon1.Visible)
             {
                 notifyIcon1.BalloonTipIcon = ToolTipIcon.Info;
                 notifyIcon1.BalloonTipText = "현재 곡 : " + song.Name + " / " + song.Artist;
                 notifyIcon1.ShowBalloonTip(2);
                 if (AuthData.LoginInfo == null) { Thread.Sleep(3000); notifyIcon1.BalloonTipText = "비로그인 회원은 1분 미리 듣기만 가능합니다."; notifyIcon1.BalloonTipIcon = ToolTipIcon.Warning; notifyIcon1.ShowBalloonTip(5); }
             }
-            bool isFull= true;
+            bool isFull = true;
             if (!(process.getProdType() == 1 || process.getProdType() == 5))
-               isFull = false;
+                isFull = false;
             //오디오 재생
+            label5.Text = "재생 준비중..";
             System.Diagnostics.Debug.WriteLine("재생 시스템 기동중!");
-            AudioSystem.Playing = new AudioSystem(song.Song_ID,isFull);
+            AudioSystem.Playing = new AudioSystem(song.Song_ID, isFull);
             //musicSystem.Dispose(); //초기화
             float volume = (float)trackBar2.Value / (float)trackBar2.Maximum;
             System.Diagnostics.Debug.WriteLine("음악 로딩중입니다..");
+            label5.Text = "음악 준비중..";
             var PrepareMusic = Task.Run(() => AudioSystem.Playing.init(HttpUtility.UrlDecode(CurrentSongInfo.Songinfo.StreamingURL), volume, CurrentSongInfo.Songinfo.isflac));
             await PrepareMusic;
             System.Diagnostics.Debug.WriteLine("모든 작업 완료!");
+            label5.Text = "";
+            lyrics.Enabled = true;
             listBox1.Enabled = true;
             timer1.Enabled = true;
-            if(!isFull)
-            MessageBox.Show("이 프로그램은 무제한 상품만 가능합니다.\r추가 상품 이용자는 다음 버전 나올 때 까지 기다려주세요!\r그로 인해 1분 재생이 됩니다.", "이용권 제한 안내", MessageBoxButtons.OK);
+            if (!isFull)
+                MessageBox.Show("이 프로그램은 무제한 상품만 가능합니다.\r추가 상품 이용자는 다음 버전 나올 때 까지 기다려주세요!\r그로 인해 1분 재생이 됩니다.", "이용권 제한 안내", MessageBoxButtons.OK);
         }
 
         private void trackBar2_Scroll(object sender, EventArgs e)
@@ -463,7 +473,7 @@ namespace Genie_PC_player
         {
             if (AudioSystem.Playing.waveout != null)
             {
-               if(AudioSystem.Playing.waveout.PlaybackState != PlaybackState.Playing)
+                if (AudioSystem.Playing.waveout.PlaybackState != PlaybackState.Playing)
                 {
                     AudioSystem.Playing.Play();
                     //Play.Text = "일시정지";
@@ -522,7 +532,7 @@ namespace Genie_PC_player
 
         private void button8_Click(object sender, EventArgs e)
         {
-            if(trackBar2.Value == 0) { trackBar2.Value = 10; } else { trackBar2.Value = 0; }
+            if (trackBar2.Value == 0) { trackBar2.Value = 10; } else { trackBar2.Value = 0; }
         }
 
         private void trackBar2_VisibleChanged(object sender, EventArgs e)
@@ -608,7 +618,7 @@ namespace Genie_PC_player
 
         private void 업데이트확인ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-           Loading ver= new Loading();
+            Loading ver = new Loading();
             ver.ShowDialog();
         }
 
@@ -629,6 +639,72 @@ namespace Genie_PC_player
             {
                 Play.Text = "재생/일시정지";
             }
+        }
+
+        private void main_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void result_Click(object sender, EventArgs e)
+        {
+
+        }
+        private CLyricsManager Lm = new CLyricsManager();
+        private void lyrics_Tick(object sender, EventArgs e)
+        {
+            if (AudioSystem.Playing.wavestream == null) return;
+            if (this.Lm.InfoID.Equals("-1")) { label5.Text = "가사 정보가 없습니다."; label6.Text = ""; lyrics.Enabled = false; return; }
+            if (this.Lm.Lyric_List == null && this.Lm.Lyric_List.Count < 0) return;
+            int Time = (int)AudioSystem.Playing.wavestream.CurrentTime.TotalMilliseconds;
+            if (label5.Text == "") { Labelnormal(label5); label5.Text = this.Lm.Lyric_List[0]; Labelnormal(label6); label6.Text = this.Lm.Lyric_List[1]; }
+            for (int index1 = this.Lm.Lyric_Time_List.Count - 1; index1 >= 0; --index1)
+            {
+                if (this.Lm.Lyric_Time_List[index1] < Time)
+                {
+                    string str = this.Lm.Lyric_List[index1];
+                    if (this.Lm.Lyric_List.Count <= index1+1) { Labelnormal(label5); label5.Refresh(); Labelbold(label6); label6.Refresh(); return; }
+                    Labelnormal(label6); Labelbold(label5);
+                    if (label5.Text.Equals(str)) return;
+                    label5.Text = str;
+                    label5.Refresh();
+                        label6.Text = this.Lm.Lyric_List[index1 + 1];
+                    label6.Refresh();
+                    /*
+                    for (int index2 = index1; index1>index1 -5 && index2 >=0; --index2)
+                    {
+                        if ((int) this.Lm.Lyric_Time_List[index2]== (int)this.Lm.Lyric_Time_List[index1])
+                        {
+                            Label label5 = this.label5;
+                            string str = this.Lm.Lyric_List[index2];
+                            label5.Text = str;
+                    if (this.Lm.Lyric_List.Count > index2 + 1)
+                    label6.Text = this.Lm.Lyric_List[index2 + 1];
+                    else
+                        label6.Text = "";
+                }
+            }*/
+                    break;
+            }
+    }
+}
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void checkBox1_CheckedChanged_1(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void timer2_Tick(object sender, EventArgs e)
+        {
+           if (!checkBox1.Checked && this.Size.Height >= 610) return;
+           else if (checkBox1.Checked && this.Size.Height <= 230) return;
+            if (checkBox1.Checked) this.Height -= 12;else
+            if (!checkBox1.Checked) this.Height+= 12;
         }
     }
 }

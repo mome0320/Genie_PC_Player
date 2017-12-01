@@ -15,62 +15,62 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_1D47E8B5837413C0D312915E51D4015E"
-        "OwnerKey" = "8:_B6F5EC164EEE4BB28E9319550EC29011"
+        "MsmKey" = "8:_1F76270B182577E2F404D906E35A4662"
+        "OwnerKey" = "8:_B3E2122C916944E7B97CF8C711484E17"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_67769E7E0A41AB72B56656DEEB5D376B"
-        "OwnerKey" = "8:_B6F5EC164EEE4BB28E9319550EC29011"
+        "MsmKey" = "8:_66D9154D5FE70595BD9AE24D3D52EF18"
+        "OwnerKey" = "8:_B3E2122C916944E7B97CF8C711484E17"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_71660A96591FC84D24F5BDC6AB980C22"
-        "OwnerKey" = "8:_B6F5EC164EEE4BB28E9319550EC29011"
+        "MsmKey" = "8:_6C4941BDED9FC90E1928A55422E41309"
+        "OwnerKey" = "8:_B3E2122C916944E7B97CF8C711484E17"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_B6F5EC164EEE4BB28E9319550EC29011"
+        "MsmKey" = "8:_B3E2122C916944E7B97CF8C711484E17"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_C2C4C555E8A42FD6AF0B1D24CD3F204C"
-        "OwnerKey" = "8:_B6F5EC164EEE4BB28E9319550EC29011"
+        "MsmKey" = "8:_CA542EDD968F3676C891C86F932899F1"
+        "OwnerKey" = "8:_B3E2122C916944E7B97CF8C711484E17"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_1D47E8B5837413C0D312915E51D4015E"
+        "OwnerKey" = "8:_B3E2122C916944E7B97CF8C711484E17"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_B6F5EC164EEE4BB28E9319550EC29011"
+        "OwnerKey" = "8:_1F76270B182577E2F404D906E35A4662"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_71660A96591FC84D24F5BDC6AB980C22"
+        "OwnerKey" = "8:_66D9154D5FE70595BD9AE24D3D52EF18"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_67769E7E0A41AB72B56656DEEB5D376B"
+        "OwnerKey" = "8:_CA542EDD968F3676C891C86F932899F1"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_C2C4C555E8A42FD6AF0B1D24CD3F204C"
+        "OwnerKey" = "8:_6C4941BDED9FC90E1928A55422E41309"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -91,6 +91,22 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.6.1"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.6.1 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.6.1"
+                    }
+                }
+            }
         }
         "Release"
         {
@@ -107,6 +123,22 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.6.1"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.6.1 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.6.1"
+                    }
+                }
+            }
         }
     }
     "Deployable"
@@ -128,7 +160,7 @@
                 {
                 "Name" = "8:.NET Framework"
                 "Message" = "8:[VSDNETMSG]"
-                "FrameworkVersion" = "8:.NETFramework,Version=v4.6.1"
+                "FrameworkVersion" = "8:.NETFramework,Version=v4.5.2"
                 "AllowLaterVersions" = "11:FALSE"
                 "InstallUrl" = "8:http://go.microsoft.com/fwlink/?LinkId=671728"
                 }
@@ -136,14 +168,66 @@
         }
         "File"
         {
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_1D47E8B5837413C0D312915E51D4015E"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_1F76270B182577E2F404D906E35A4662"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:System.Net.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
+            "AssemblyAsmDisplayName" = "8:NAudio, Version=1.8.3.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_1D47E8B5837413C0D312915E51D4015E"
+                }
+            "SourcePath" = "8:NAudio.DLL"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_4EB8C0CDB0A64774B1BAE666791511E8"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_66D9154D5FE70595BD9AE24D3D52EF18"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:NAudio.Flac, Version=1.0.5702.29018, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                }
+            "SourcePath" = "8:NAudio.Flac.DLL"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_4EB8C0CDB0A64774B1BAE666791511E8"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_6C4941BDED9FC90E1928A55422E41309"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:TRUE"
+            "AssemblyAsmDisplayName" = "8:System.Net.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_6C4941BDED9FC90E1928A55422E41309"
                     {
                     "Name" = "8:System.Net.Http.dll"
                     "Attributes" = "3:512"
@@ -167,20 +251,20 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_67769E7E0A41AB72B56656DEEB5D376B"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_B3E2122C916944E7B97CF8C711484E17"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:NAudio.Flac, Version=1.0.5702.29018, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:Genie PC player, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_67769E7E0A41AB72B56656DEEB5D376B"
+                    "_B3E2122C916944E7B97CF8C711484E17"
                     {
-                    "Name" = "8:NAudio.Flac.dll"
+                    "Name" = "8:Genie PC player.exe"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:NAudio.Flac.dll"
+            "SourcePath" = "8:..\\Genie PC player\\bin\\Release\\Protected\\Genie PC player.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_4EB8C0CDB0A64774B1BAE666791511E8"
@@ -195,54 +279,18 @@
             "PackageAs" = "3:1"
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_71660A96591FC84D24F5BDC6AB980C22"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_CA542EDD968F3676C891C86F932899F1"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_71660A96591FC84D24F5BDC6AB980C22"
-                    {
-                    "Name" = "8:Newtonsoft.Json.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
-            "SourcePath" = "8:Newtonsoft.Json.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_4EB8C0CDB0A64774B1BAE666791511E8"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_C2C4C555E8A42FD6AF0B1D24CD3F204C"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:NAudio, Version=1.8.3.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_C2C4C555E8A42FD6AF0B1D24CD3F204C"
-                    {
-                    "Name" = "8:NAudio.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:NAudio.dll"
+            "SourcePath" = "8:Newtonsoft.Json.DLL"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_4EB8C0CDB0A64774B1BAE666791511E8"
@@ -315,27 +363,27 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:Setup1"
-        "ProductCode" = "8:{7A545C36-97D0-4D37-9112-229330BECA9F}"
-        "PackageCode" = "8:{4222BC9D-F08C-4165-9944-D89D1731298F}"
+        "ProductName" = "8:Genie PC Player"
+        "ProductCode" = "8:{5C7EC3F7-99FB-4537-BDBA-41C0904FFAFB}"
+        "PackageCode" = "8:{071C48A7-3034-4F8D-8335-18BB0D4E925F}"
         "UpgradeCode" = "8:{EDF3696A-CBA9-4A2B-8810-415E7271BC18}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
-        "RemovePreviousVersions" = "11:FALSE"
+        "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
-        "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.0.0"
-        "Manufacturer" = "8:Default Company Name"
+        "InstallAllUsers" = "11:TRUE"
+        "ProductVersion" = "8:0.1.2"
+        "Manufacturer" = "8:MoartMedia"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
-        "Title" = "8:Setup1"
-        "Subject" = "8:"
-        "ARPCONTACT" = "8:Default Company Name"
+        "Title" = "8:Genie PC Player"
+        "Subject" = "8:Genie PC Player"
+        "ARPCONTACT" = "8:MoartMedia"
         "Keywords" = "8:"
         "ARPCOMMENTS" = "8:"
-        "ARPURLINFOABOUT" = "8:"
-        "ARPPRODUCTICON" = "8:"
-        "ARPIconIndex" = "3:0"
+        "ARPURLINFOABOUT" = "8:http://moart.media"
+        "ARPPRODUCTICON" = "8:_B3E2122C916944E7B97CF8C711484E17"
+        "ARPIconIndex" = "3:32512"
         "SearchPath" = "8:"
         "UseSystemSearchPath" = "11:TRUE"
         "TargetPlatform" = "3:0"
@@ -445,10 +493,10 @@
             "ShowCmd" = "3:1"
             "IconIndex" = "3:32512"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_B6F5EC164EEE4BB28E9319550EC29011"
+            "Target" = "8:_B3E2122C916944E7B97CF8C711484E17"
             "Folder" = "8:_1FE641D6C29D464ABC2AE32E4DC0462F"
             "WorkingFolder" = "8:_4EB8C0CDB0A64774B1BAE666791511E8"
-            "Icon" = "8:_B6F5EC164EEE4BB28E9319550EC29011"
+            "Icon" = "8:_B3E2122C916944E7B97CF8C711484E17"
             "Feature" = "8:"
             }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_EBF42850C05041ACBFF101C56AADD17D"
@@ -459,10 +507,10 @@
             "ShowCmd" = "3:1"
             "IconIndex" = "3:32512"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_B6F5EC164EEE4BB28E9319550EC29011"
+            "Target" = "8:_B3E2122C916944E7B97CF8C711484E17"
             "Folder" = "8:_0A93B8C5F5AB4F3EBBEE047697E0AFD5"
             "WorkingFolder" = "8:_4EB8C0CDB0A64774B1BAE666791511E8"
-            "Icon" = "8:_B6F5EC164EEE4BB28E9319550EC29011"
+            "Icon" = "8:_B3E2122C916944E7B97CF8C711484E17"
             "Feature" = "8:"
             }
         }
@@ -864,34 +912,6 @@
         }
         "ProjectOutput"
         {
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_B6F5EC164EEE4BB28E9319550EC29011"
-            {
-            "SourcePath" = "8:..\\Genie PC player\\obj\\Release\\Genie PC player.exe"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_4EB8C0CDB0A64774B1BAE666791511E8"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            "ProjectOutputGroupRegister" = "3:1"
-            "OutputConfiguration" = "8:"
-            "OutputGroupCanonicalName" = "8:Built"
-            "OutputProjectGuid" = "8:{31AC195A-F83F-4A27-B702-B4623D9CFBED}"
-            "ShowKeyOutput" = "11:TRUE"
-                "ExcludeFilters"
-                {
-                }
-            }
         }
     }
 }
